@@ -18,7 +18,7 @@ class CardReader:
     def bytes2np(self, img_bytes):
         # may need JPEG-2000 decoder (https://stackoverflow.com/questions/44782612/pillow-and-jpeg2000-decoder-jpeg2k-not-available)
         img = Image.open(io.BytesIO(img_bytes))
-        # img.save("im.png", "JPEG")
+        img.save("im.png", "JPEG")
         return np.array(img)
 
     def set_mrz_port(self, port="/dev/ttyACM0", timeout=10000):

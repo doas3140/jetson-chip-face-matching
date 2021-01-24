@@ -48,7 +48,7 @@ public class CardReader {
         // get the first terminal
         CardTerminal terminal = terminals.get(index);
         for (CardTerminal t: terminals) {
-            if (t.getName().equals("ELYCTIS CL reader 0")) {
+            if (t.getName().contains("ELYCTIS")) {
                 terminal = t;
             }
         }
