@@ -4,9 +4,9 @@ project("pbcvt")
 #----------------------------CMAKE & GLOBAL PROPERTIES-------------------------#
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-SET(OpenCV_DIR "~/GitHub/opencv")
-SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "~/GitHub/opencv")
-SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "~/GitHub/opencv")
+# SET(OpenCV_DIR "~/GitHub/opencv")
+# SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "~/GitHub/opencv")
+# SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "~/GitHub/opencv")
 SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "/usr/lib")
 SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "/usr/lib")
 ###============= C++11 support====================================

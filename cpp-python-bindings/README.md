@@ -1,6 +1,6 @@
 # Python (Numpy) <-> C++ (OpenCV Mat)
 
-## 1. install opencv
+## 1. install opencv (no need for jetson)
 
 ```bash
 sudo apt update && sudo apt install -y cmake g++ wget unzip
@@ -16,7 +16,7 @@ cmake --build .
 ```bash
 sudo apt install build-essential libboost-all-dev
 sudo apt-get install cmake cmake-gui build-essential
-# set opencv, boost src in CMakeLists.txt
+# set opencv (no need for jetson), boost src in CMakeLists.txt
 ```
 
 ## 3. build
@@ -30,7 +30,7 @@ make
 ## 4. test
 
 ```bash
-python
+python3
 ```
 
 ```python
