@@ -79,7 +79,16 @@ message("TENSORRT_LIBRARY = ${TENSORRT_LIBRARY}")
 
 AUX_SOURCE_DIRECTORY(./src DIR_SRCS)
 message("DIR_SRCS = ${DIR_SRCS}")
-cuda_add_executable(${PROJECT_NAME} ${DIR_SRCS} src/pnet_rt.cpp src/common.h src/common.cpp src/pnet_rt.h src/rnet_rt.cpp src/rnet_rt.h src/baseEngine.cpp src/baseEngine.h src/onet_rt.h src/onet_rt.cpp)
+
+# use this to gen executable:
+# cuda_add_executable(${PROJECT_NAME} ${DIR_SRCS} src/pnet_rt.cpp src/common.h src/common.cpp src/pnet_rt.h src/rnet_rt.cpp src/rnet_rt.h src/baseEngine.cpp src/baseEngine.h src/onet_rt.h src/onet_rt.cpp)
+# use this to create library:
+file(GLOB_RECURSE _SRCS "./src/*.cpp")
+file(GLOB_RECURSE _HDRS "./src/*.h")
+cuda_add_library(${PROJECT_NAME} SHARED
+  # ${_HDRS} ${_SRCS}
+  ${DIR_SRCS} src/pnet_rt.cpp src/common.h src/common.cpp src/pnet_rt.h src/rnet_rt.cpp src/rnet_rt.h src/baseEngine.cpp src/baseEngine.h src/onet_rt.h src/onet_rt.cpp
+)
 
 target_link_libraries(${PROJECT_NAME}
   trt_l2norm_helper

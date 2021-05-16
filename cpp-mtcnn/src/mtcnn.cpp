@@ -1,6 +1,7 @@
 #include "mtcnn.h"
 //#define LOG
 mtcnn::mtcnn(int row, int col){
+    cout<<"Initing mtcnn..."<<endl;
     //set NMS thresholds
     nms_threshold[0] = 0.7;
     nms_threshold[1] = 0.7;

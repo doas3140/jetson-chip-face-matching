@@ -2,10 +2,31 @@
 
 #include <boost/python.hpp>
 #include <pyboostcvconverter/pyboostcvconverter.hpp>
-
+#include "../../cpp-mtcnn/src/network.h"
+#include "../../cpp-mtcnn/src/mtcnn.h"
 namespace pbcvt {
 
     using namespace boost::python;
+
+    PyObject *init_mtcnn() {
+        //test using images
+        Mat tmp = imread("../4.jpg");
+        Mat image = imread("../4.jpg");
+        resize(tmp,tmp,Size(640,480));
+        resize(image,image,Size(640,480));
+        // mtcnn find(image.rows, image.cols);
+
+        // find.findFace(tmp);
+        // clock_t start;
+        // start = clock();
+        // find.findFace(image);
+        // start = clock() -start;
+        // imshow("result", image);
+        // imwrite("result.jpg",image);
+        // cout<<"time is  "<<(double)start/CLOCKS_PER_SEC<<endl;
+        PyObject *ret = pbcvt::fromMatToNDArray(tmp);
+        return ret;
+    }
 
 /**
  * @brief Example function. Basic inner matrix product using explicit matrix conversion.
@@ -99,6 +120,7 @@ namespace pbcvt {
         matFromNDArrayBoostConverter();
 
         //expose module-level functions
+        def("init_mtcnn", init_mtcnn);
         def("dot", dot);
         def("dot2", dot2);
 		def("makeCV_16UC3Matrix", makeCV_16UC3Matrix);
