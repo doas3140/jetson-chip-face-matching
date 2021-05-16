@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-set(PROJECT_NAME main)
+set(PROJECT_NAME cpp_mtcnn)
 project(${PROJECT_NAME})# LANGUAGES CXX CUDA)
 
 set (CMAKE_CXX_STANDARD 11)
