@@ -1,5 +1,7 @@
 #define PY_ARRAY_UNIQUE_SYMBOL pbcvt_ARRAY_API
 
+#include <string>
+#include <time.h>
 #include <boost/python.hpp>
 #include <pyboostcvconverter/pyboostcvconverter.hpp>
 #include "../../cpp-mtcnn/src/network.h"
@@ -8,25 +10,25 @@ namespace pbcvt {
 
     using namespace boost::python;
 
-    PyObject *init_mtcnn() {
-        //test using images
-        Mat tmp = imread("../4.jpg");
-        Mat image = imread("../4.jpg");
-        resize(tmp,tmp,Size(640,480));
-        resize(image,image,Size(640,480));
-        // mtcnn find(image.rows, image.cols);
-
-        // find.findFace(tmp);
-        // clock_t start;
-        // start = clock();
-        // find.findFace(image);
-        // start = clock() -start;
-        // imshow("result", image);
-        // imwrite("result.jpg",image);
-        // cout<<"time is  "<<(double)start/CLOCKS_PER_SEC<<endl;
-        PyObject *ret = pbcvt::fromMatToNDArray(tmp);
-        return ret;
-    }
+    struct MTCNN
+    {
+        void init(int h, int w){
+            this->h = h;
+            this->w = w;
+            this->find = new mtcnn(h, w);
+        }
+        PyObject *findFace(PyObject *np_img) {
+            cv::Mat image;
+            image = pbcvt::fromNDArrayToMat(np_img);
+            resize(image,image,Size(w,h));
+            Mat out = (*find).findFace(image);
+            PyObject *ret = pbcvt::fromMatToNDArray(out);
+            return ret;
+        }
+        mtcnn *find;
+        int h;
+        int w;
+    };
 
 /**
  * @brief Example function. Basic inner matrix product using explicit matrix conversion.
@@ -120,10 +122,14 @@ namespace pbcvt {
         matFromNDArrayBoostConverter();
 
         //expose module-level functions
-        def("init_mtcnn", init_mtcnn);
         def("dot", dot);
         def("dot2", dot2);
 		def("makeCV_16UC3Matrix", makeCV_16UC3Matrix);
+
+        class_<MTCNN>("MTCNN")
+            .def("init", &MTCNN::init)
+            .def("findFace", &MTCNN::findFace)
+            ;
 
 		//from PEP8 (https://www.python.org/dev/peps/pep-0008/?#prescriptive-naming-conventions)
         //"Function names should be lowercase, with words separated by underscores as necessary to improve readability."

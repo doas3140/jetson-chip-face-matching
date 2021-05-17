@@ -62,9 +62,10 @@ mtcnn::~mtcnn(){
     //delete []simpleFace_;
 }
 
-void mtcnn::findFace(Mat &image){
+Mat mtcnn::findFace(Mat &image){
     struct orderScore order;
     int count = 0;
+    Mat empty;
 
     clock_t first_time = clock();
     for (size_t i = 0; i < scales_.size(); i++) {
@@ -93,7 +94,7 @@ void mtcnn::findFace(Mat &image){
         (*simpleFace_[i]).boundingBox_.clear();
     }
     //the first stage's nms
-    if(count<1)return;
+    if(count<1)return empty;
     nms(firstBbox_, firstOrderScore_, nms_threshold[0]);
     refineAndSquareBbox(firstBbox_, image.rows, image.cols,true);
 #ifdef LOG
@@ -124,7 +125,7 @@ void mtcnn::findFace(Mat &image){
             }
         }
     }
-    if(count<1)return;
+    if(count<1)return empty;
     nms(secondBbox_, secondBboxScore_, nms_threshold[1]);
     refineAndSquareBbox(secondBbox_, image.rows, image.cols,true);
     second_time = clock() - second_time;
@@ -164,23 +165,44 @@ void mtcnn::findFace(Mat &image){
         }
     }
 
-    if(count<1)return;
+    if(count<1)return empty;
     refineAndSquareBbox(thirdBbox_, image.rows, image.cols, true);
     nms(thirdBbox_, thirdBboxScore_, nms_threshold[2], "Min");
 #ifdef LOG
     third_time = clock() - third_time;
     cout<<"third time is  "<<1000*(double)third_time/CLOCKS_PER_SEC<<endl;
 #endif
+    vector<struct Bbox> faces;
     for(vector<struct Bbox>::iterator it=thirdBbox_.begin(); it!=thirdBbox_.end();it++){
         if((*it).exist){
-            rectangle(image, Point((*it).y1, (*it).x1), Point((*it).y2, (*it).x2), Scalar(0,0,255), 2,8,0);
-            for(int num=0;num<5;num++)circle(image,Point((int)*(it->ppoint+num), (int)*(it->ppoint+num+5)),3,Scalar(0,255,255), -1);
+            faces.push_back(*it);
+            // delete temp;
+            // rects.at<int32_t>(currectFace, 0) = (*it).y1;
+            // rects.at<int32_t>(currectFace, 1) = (*it).x1;
+            // rects.at<int32_t>(currectFace, 2) = (*it).y2;
+            // rects.at<int32_t>(currectFace, 3) = (*it).x2;
+            
+            // rectangle(image, Point((*it).y1, (*it).x1), Point((*it).y2, (*it).x2), Scalar(0,0,255), 2,8,0);
+            // for(int num=0;num<5;num++)circle(image,Point((int)*(it->ppoint+num), (int)*(it->ppoint+num+5)),3,Scalar(0,255,255), -1);
         }
     }
+
+    Mat rects = Mat(faces.size(),4,CV_32SC1);
+    int currectFace = 0;
+
+    for(int num=0;num<faces.size();num++){
+        rects.at<int32_t>(currectFace, 0) = faces[currectFace].y1;
+        rects.at<int32_t>(currectFace, 1) = faces[currectFace].x1;
+        rects.at<int32_t>(currectFace, 2) = faces[currectFace].y2;
+        rects.at<int32_t>(currectFace, 3) = faces[currectFace].x2;
+        currectFace++;
+    }
+    faces.clear();
     firstBbox_.clear();
     firstOrderScore_.clear();
     secondBbox_.clear();
     secondBboxScore_.clear();
     thirdBbox_.clear();
     thirdBboxScore_.clear();
+    return rects;
 }

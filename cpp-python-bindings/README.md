@@ -44,3 +44,10 @@ b = np.array([[1.],
 print(pbcvt.dot(a, b)) # should print [[14.]]
 print(pbcvt.dot2(a, b)) # should also print [[14.]]
 ```
+
+## 5. copy built python .so file
+
+```bash
+cp build/pbcvt.cpython-36m-aarch64-linux-gnu.so ../python-main/
+cp -r mtCNNModels .. # mtcnn model requires this
+```
