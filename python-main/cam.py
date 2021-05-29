@@ -8,6 +8,8 @@ class Camera:
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         self.cap.set(cv2.CAP_PROP_FPS, 30)
+        _, frame = self.cap.read()
+        print('frame shape:', frame.shape)
         print('camera fps: {}'.format(self.cap.get(cv2.CAP_PROP_FPS)))
 
     def read(self): # returns np.array<int> [h,w,3]

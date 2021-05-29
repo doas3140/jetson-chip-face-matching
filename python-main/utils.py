@@ -26,6 +26,7 @@ class Timer:
     def __exit__(self, exc_type, exc_val, exc_tb):
       name = self.N.pop()
       t0 = self.S.pop()
+      # print(name, 'took:', time.time() - t0)
       self.D[name].append(time.time() - t0)
     def get_means_df(self):
       d = {f'{k} ({len(v)})':[np.mean(v)] for k,v in self.D.items()}
