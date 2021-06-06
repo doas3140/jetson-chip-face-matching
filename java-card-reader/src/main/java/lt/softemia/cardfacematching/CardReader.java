@@ -27,7 +27,7 @@ public class CardReader {
         CardTerminal terminal = getTerminal(terminal_index);
         System.out.println("using terminal: |" + terminal.getName() + "|");
         MyCardService service = new MyCardService(terminal);
-        passport_service = new PassportService(service, 256, 256, true, false); // SFI - Short File Identifier
+        passport_service = new PassportService(service, 256, 224, true, true); // SFI - Short File Identifier
     }
 
     public byte[] readImage(String mrz) throws CardServiceException, IOException {
@@ -64,6 +64,7 @@ public class CardReader {
         System.out.println("[TIME] dg2 1: " + (System.currentTimeMillis() - t0));
 
         BACKey key = new BACKey(mrz.getDocumentNumber(), mrz.getDateOfBirth(), mrz.getDateOfExpiry());
+        System.out.println("dg2 key: " + key.getKey() + " nr: " + key.getDocumentNumber() + " birth: " + key.getDateOfBirth() + " exp: " + key.getDateOfExpiry());
         BACResult res = passport_service.doBAC(key);
 
         System.out.println("[TIME] dg2 2: " + (System.currentTimeMillis() - t0));

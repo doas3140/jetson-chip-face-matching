@@ -45,10 +45,15 @@ public class MrzReader {
             byte[] mrz = serialPort.readBytes(len, timeout);
 //            System.out.println("mrz received: " + Arrays.toString(mrz));
             String out = new String(mrz, StandardCharsets.US_ASCII);
+            out = out.replace("\r", "");
 
             System.out.println("[TIME] mrz 4: " + (System.currentTimeMillis() - t0));
 
-            return out.replace("\r", "");
+            if(out.length() < 1){
+                throw new IOException("Failed to read MRZ through serial port");
+            }
+
+            return out;
         } catch (SerialPortException | SerialPortTimeoutException e) {
             throw new IOException("Failed to read MRZ through serial port", e);
         } finally {

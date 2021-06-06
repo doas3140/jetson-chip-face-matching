@@ -26,7 +26,7 @@ public class MrzAndImageReader {
                 String mrz = mrz_reader.read();
                 return card_reader.readImage(mrz);
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
                 return new byte[]{};
             }
         });

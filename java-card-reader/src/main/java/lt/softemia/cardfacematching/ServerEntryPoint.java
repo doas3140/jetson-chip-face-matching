@@ -26,7 +26,7 @@ public class ServerEntryPoint {
         return mrz_and_image_reader;
     }
 
-    public static void main(String[] args) throws CardException, IOException {
+    public static void main(String[] args) throws Exception {
         GatewayServer gatewayServer = new GatewayServer(new ServerEntryPoint());
         gatewayServer.start();
         System.out.println("Gateway Server Started");
@@ -35,7 +35,7 @@ public class ServerEntryPoint {
     public static void test() throws CardException, IOException, CardServiceException, SerialPortException{
         System.out.println("started test");
         MrzReader mrz_reader = new MrzReader();
-        mrz_reader.setPort("COM3", 10000); // "/dev/ttyACM0"
+        mrz_reader.setPort("/dev/ttyACM0", 10000); // "/dev/ttyACM0"
         long t0 = System.currentTimeMillis();
         String mrz = mrz_reader.read();
         System.out.println("[TIME] mrz: " + (System.currentTimeMillis() - t0));

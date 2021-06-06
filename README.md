@@ -1,5 +1,27 @@
 # Jetson Nano ID Card Face Matching
 
+## Results (seconds / 1 iteration)
+
+```bash
++-----------------------+---------------------+---------------------
+|   camera-facenet (66) |   camera-mtcnn (66) |   camera-total (65) 
++-----------------------+---------------------+---------------------
+|               0.30521 |           0.0823414 |            0.422477 
++-----------------------+---------------------+---------------------
+
++--------------------+------------------+------------------
+|   load-facenet (1) |   load-mtcnn (1) |   load-total (1) 
++--------------------+------------------+------------------
+|            23.6003 |          137.729 |          166.797 
++--------------------+------------------+------------------
+
++----------------------+--------------------+-------------------+--------------------+
+|   reader-facenet (1) |   reader-mtcnn (1) |   reader-read (1) |   reader-total (1) |
++----------------------+--------------------+-------------------+--------------------|
+|             0.143955 |          0.0921009 |           6.14482 |            6.38316 |
++----------------------+--------------------+-------------------+--------------------+
+```
+
 ## Prep
 
 ### Visual Studio Code
@@ -11,6 +33,8 @@ cd installVSCode
 ```
 
 ### CPP MTCNN
+
+`read cpp-mtcnn/README.md`
 
 ```bash
 # openblas
@@ -28,23 +52,41 @@ sudo pip3 install --pre --extra-index-url https://developer.download.nvidia.com/
 ```
 
 ```bash
-cd cpp-mtcnn
-mkdir build && cd build  
+mkdir -p build && cd build  
 cmake -DCMAKE_BUILD_TYPE=Release ..  
 make -j${nproc}  
-./main
+./cpp_mtcnn
+```
+
+### Python bindings for MTCNN
+
+`read cpp-python-bindings/README.md`
+
+```bash
+sudo apt install build-essential libboost-all-dev
+sudo apt-get install cmake cmake-gui build-essential
+mkdir -p build && cd build
+cmake ..
+make 
 ```
 
 ### Java Card Reader
 
-```bash
-cd java-card-reader
-sudo apt-get install -y openjdk-11-jre openjdk-11-jdk maven
-mvn -e package  
-```
+`read java-card-reader/README.md`
+
+java:
 
 ```bash
-# build openjdk(to decode JPEG2000) (https://github.com/uclouvain/openjpeg/blob/master/INSTALL.md):
+sudo apt-get install openjdk-11-jre  
+sudo apt-get install openjdk-11-jdk  
+mvn -e package  
+sudo java -jar target/consoleApp-1.0-SNAPSHOT.jar  
+```
+
+python:  
+
+```bash
+build openjdk(to decode JPEG2000) (https://github.com/uclouvain/openjpeg/blob/master/INSTALL.md):
 git clone https://github.com/uclouvain/openjpeg.git  
 cd openjpeg  
 mkdir build  
@@ -53,12 +95,15 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 make  
 sudo make install  
 sudo make clean  
+# install pillow:  
 pip3 uninstall pillow # (if needed)  
 pip3 install pillow  
 pip3 install py4j  
 ```
 
 ### Python Main
+
+`read python-main/README.md`
 
 ```bash
 # install the dependencies (if not already onboard)
@@ -90,5 +135,5 @@ sudo java -jar target/consoleApp-1.0-SNAPSHOT.jar
 
 ```bash
 cd python-main
-python3 main.py
+sudo python3 main.py
 ```
